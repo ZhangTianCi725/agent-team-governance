@@ -1,0 +1,2 @@
+# agent-team-governance 仅依赖 Python 标准库（Python 3.10+）。
+# 无需安装任何第三方包。此文件留空，仅为习惯性占位。

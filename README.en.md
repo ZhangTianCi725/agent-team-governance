@@ -2,6 +2,11 @@
 
 [简体中文](README.md) | **English**
 
+[![CI](https://github.com/tiandez894-sketch/agent-team-governance/actions/workflows/ci.yml/badge.svg)](https://github.com/tiandez894-sketch/agent-team-governance/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](requirements.txt)
+
 > **A governance layer for multi-agent systems — make an agent team's output *traceable, constrained, falsifiable*.**
 
 When multiple LLM agents work together, the real danger is not that they
@@ -117,6 +122,10 @@ written up in [`docs/case-study.md`](docs/case-study.md).
 - [ ] CLI: `govern init` to scaffold a role
 - [ ] Adapters for mainstream agent frameworks (LangGraph / CrewAI)
 - [ ] A controlled experiment: governed vs. ungoverned (completion rate / error rate / cost)
+
+## Support
+
+If this project is useful to you, a ⭐ star is appreciated.
 
 ## License
 

@@ -2,6 +2,11 @@
 
 **简体中文** | [English](README.en.md)
 
+[![CI](https://github.com/tiandez894-sketch/agent-team-governance/actions/workflows/ci.yml/badge.svg)](https://github.com/tiandez894-sketch/agent-team-governance/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](requirements.txt)
+
 > **多智能体协作的治理层 —— 让一个 Agent 团队的产出「可追溯、可约束、可证伪」。**
 >
 > A governance layer for multi-agent systems: *traceable, constrained, falsifiable.*
@@ -48,6 +53,27 @@ python examples/minimal_team.py
 ```
 
 你会看到三个治理层各自生效：规则集自证可红、决策留痕、静默失效被当场逮住。
+
+```text
+────────────────────────────────────────────────────────────
+agent-team-governance · 最小演示
+────────────────────────────────────────────────────────────
+
+[治理② 规则自证] 规则集可红性校验：✅ 通过
+   ✅ 合规样本         期望=[] 实得=[]
+   ✅ 违约: 没落盘      期望=['R-001'] 实得=['R-001']
+   ✅ 违约: 无时点读数    期望=['R-002'] 实得=['R-002']
+   ✅ 违约: 不可逆未记日志  期望=['R-003'] 实得=['R-003']
+
+[治理① 决策日志] 已记录 1 条 · 其中不可逆 1 条（带证据收据）
+
+[治理③ 自我审查] 复核 2 条产出 ⇒ 🚩 逮到静默失效
+   🚩 [key_match] writer: 消费键 ['code'] 在数据键中不存在 ⇒ 静默查空
+
+────────────────────────────────────────────────────────────
+结论：三条治理各自可执行 —— 规则能红、决策留痕、失效被逮。
+────────────────────────────────────────────────────────────
+```
 
 ```python
 from govern import DecisionLog, RuleSet, ReviewCycle, OutputRecord
@@ -105,6 +131,10 @@ agent-team-governance/
 - [ ] CLI：`govern init` 生成角色骨架
 - [ ] 与主流 Agent 框架（LangGraph / CrewAI）的适配示例
 - [ ] 治理 vs 无治理的对照实验（任务完成率 / 错误率 / 成本）
+
+## 支持
+
+如果这个项目对你有帮助，欢迎点个 ⭐ Star 支持一下。
 
 ## License
 

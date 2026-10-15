@@ -2,10 +2,12 @@
 
 [简体中文](README.md) | **English**
 
-[![CI](https://github.com/tiandez894-sketch/agent-team-governance/actions/workflows/ci.yml/badge.svg)](https://github.com/tiandez894-sketch/agent-team-governance/actions/workflows/ci.yml)
+[![CI](https://github.com/ZhangTianCi725/agent-team-governance/actions/workflows/ci.yml/badge.svg)](https://github.com/ZhangTianCi725/agent-team-governance/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](requirements.txt)
+
+📐 [Architecture](ARCHITECTURE.md) · 🧪 [Case Study (3 real incidents)](docs/case-study.md) · ▶️ [Minimal runnable example](examples/minimal_team.py) · ⚖️ [Design creeds](#design-creeds)
 
 > **A governance layer for multi-agent systems — make an agent team's output *traceable, constrained, falsifiable*.**
 
@@ -90,6 +92,7 @@ agent-team-governance/
 │   └── review.py         # ③ self-audit (three anti-silent-failure criteria)
 ├── roles/                # role definition templates (charter + state + contract)
 ├── examples/minimal_team.py
+├── ARCHITECTURE.md       # design rationale + how the three layers cooperate
 └── docs/case-study.md    # real incident post-mortems (root cause → fix → prevention)
 ```
 
@@ -113,8 +116,25 @@ agent-team-governance/
 These patterns are abstracted from a **single-operator, 5-agent production system**
 (data audit / strategy research / sentiment monitoring / execution / team lead)
 that has been running unattended for months. The pitfalls it hit — silent
-failures, live files getting whole-file rewritten, green-washing checks — are all
-written up in [`docs/case-study.md`](docs/case-study.md).
+failures, live files getting whole-file rewritten, green-washing checks — the three
+post-mortems below are exactly those.
+
+## Case Study — the three layers were reverse-engineered from real incidents
+
+This was not designed first and then given a use case. It was **bitten first**, and the
+three layers grew out of the wounds. Each case is written up as
+**symptom → root cause → fix → prevention**:
+
+| Case | Symptom | Why it's dangerous | Governing layer |
+|:--|:--|:--|:--|
+| **① Silent failure** | The system "ran fine" for **13 days** — the output was garbage | Exit code `0`, logs full of ✓ — **nothing raised an alarm**, so nobody looked | ③ `review.py` three criteria (freshness / reachability / key-match) |
+| **② Live file overwritten** | A shared log went **327 lines → 191**, silently losing 9 sections | With agents running in parallel, each thinks it is *creating* the file | ① `store.py` append-only + **read-back self-proof** |
+| **③ Green-washing check** | A check **always passes** — because it can never fail | Worse than no check at all: it manufactures **false confidence** | ② `rules.py` `self_test()` positive + negative controls |
+
+> What all three share: **none of them cries out on its own.** The job of a governance
+> layer is therefore not to make agents smarter, but to **make their failures loud**.
+
+👉 Full post-mortems (timeline, root-cause code, fix commits): [**`docs/case-study.md`**](docs/case-study.md)
 
 ## Roadmap
 

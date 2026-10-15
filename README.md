@@ -2,10 +2,12 @@
 
 **简体中文** | [English](README.en.md)
 
-[![CI](https://github.com/tiandez894-sketch/agent-team-governance/actions/workflows/ci.yml/badge.svg)](https://github.com/tiandez894-sketch/agent-team-governance/actions/workflows/ci.yml)
+[![CI](https://github.com/ZhangTianCi725/agent-team-governance/actions/workflows/ci.yml/badge.svg)](https://github.com/ZhangTianCi725/agent-team-governance/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](requirements.txt)
+
+📐 [架构详解](ARCHITECTURE.md) · 🧪 [实战案例（3 个真实事故）](docs/case-study.md) · ▶️ [最小可运行示例](examples/minimal_team.py) · ⚖️ [设计信条](#设计信条)
 
 > **多智能体协作的治理层 —— 让一个 Agent 团队的产出「可追溯、可约束、可证伪」。**
 >
@@ -108,6 +110,7 @@ agent-team-governance/
 │   └── review.py         # ③ 自我审查（反静默失效三判据）
 ├── roles/                # 角色定义模板（说明书 + 状态 + 契约）
 ├── examples/minimal_team.py
+├── ARCHITECTURE.md       # 三层治理的设计思路与协作关系
 └── docs/case-study.md    # 真实故障复盘（根因 → 修法 → 防复发）
 ```
 
@@ -123,7 +126,22 @@ agent-team-governance/
 
 这套治理模式抽象自一个**单人运维的 5-Agent 生产系统**（数据审计 / 策略研究 /
 舆情监控 / 执行 / 主管），已连续无人值守运行数月。踩过的坑（静默失效、活文件被整份
-回写、假绿判据）都写进了 [`docs/case-study.md`](docs/case-study.md)。
+回写、假绿判据）—— 下面就是其中三个的完整复盘。
+
+## Case Study —— 三层是从真实事故里反推出来的
+
+不是先设计再找场景，而是**先被咬，才长出这三层**。每个案例都按 **现象 → 根因 → 修法 → 防复发** 写全：
+
+| 案例 | 现象 | 为什么危险 | 对应治理层 |
+|:--|:--|:--|:--|
+| **① 静默失效** | 系统「正常运行」**13 天**，产出却全是废的 | 退出码 `0`、日志满屏 ✓ —— **没有任何报警**，人不会去看 | ③ `review.py` 三判据（新鲜度 / 可达性 / 键匹配） |
+| **② 活文件被整份回写** | 共享日志 **327 行 → 191 行**，静默丢失 9 段 | 多 Agent 并行时，每个都以为自己是在「创建」文件 | ① `store.py` append-only + 写完**回读自证** |
+| **③ 假绿判据** | 检查**永远通过** —— 因为它根本不会红 | 比没有检查更糟：它给出**虚假的安全感** | ② `rules.py` `self_test()` 正反对照 |
+
+> 三条的共同点：**它们都不会自己喊疼**。所以治理层的任务不是"让 Agent 更聪明"，
+> 而是**让它的失败变得刺眼**。
+
+👉 完整复盘（含故障时间线、根因代码、修复 commit）：[**`docs/case-study.md`**](docs/case-study.md)
 
 ## Roadmap
 
